@@ -1,0 +1,22 @@
+{
+  "name": "mockproxy",
+  "version": "1.0.0",
+  "description": "http/s proxy and mock",
+  "main": "app.js",
+  "scripts": {
+    "test": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JorgeAlonso/mockproxy.git"
+  },
+  "author": "jorgealonso",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JorgeAlonso/mockproxy/issues"
+  },
+  "homepage": "https://github.com/JorgeAlonso/mockproxy#readme",
+  "dependencies": {
+    "http-proxy": "^1.14.0"
+  }
+}
