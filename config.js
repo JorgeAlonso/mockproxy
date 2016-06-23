@@ -21,4 +21,6 @@ config.routes = {
     },
 };
 
+config.mockdir = "mockfiles"
+
 module.exports = config;

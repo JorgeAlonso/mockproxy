@@ -1,29 +1,17 @@
 'use strict'
 
-const fs = require("fs");
+const fs = require("fs"),
+    mime = require("mime"),
+    config = require("../config.js");
 
 module.exports = {
     readLocalFileFromRequest: readLocalFileFromRequest,
 }
 
 /**
- * 
- */
-function readLocalFileFromRequest(req, res) {
-    let fileDetails = getFileDetails(req);
-    
-    if (!fileDetails) return false;
-    
-    let fileContents = fs.readFileSync(fileDetails.fullPath);
-    
-    return fileContents;
-    
-}
-
-/**
  * TODO: REFACTOR TO USE FILEDESCRIPTORS
  */
-function getFileDetails(req) {
+function readLocalFileFromRequest(req, res) {
     let method = req.method;
     
     let tokens = req.url.split("/");
@@ -39,10 +27,23 @@ function getFileDetails(req) {
         break;
     }
     
-    let directoryPath = tokens.splice(-1, 1).join("/");
+    //Remove filename
+    tokens.splice(-1, 1);
     
-    let dir = fs.statSync(directoryPath);
-    if (!dir.isDirectory()) return null;
+    let subdirectory = tokens.join("/");
+    
+    let directoryPath = "./"+subdirectory;
+    if (config.mockdir) {
+        directoryPath = "./"+config.mockdir+"/"+subdirectory;
+    }
+    
+    let dir;
+    try {
+        dir = fs.statSync(directoryPath);
+    } catch (err) {
+        return false;
+    }
+    if (!dir.isDirectory()) return false;
     
     let fileNamesInDir = fs.readdirSync(directoryPath);
     
@@ -50,14 +51,17 @@ function getFileDetails(req) {
     
     
     for (let dirFileName of fileNamesInDir) {
-        if (dirFileName.split(".")[0] === fileName) fullPath = directoryPath + dirFileName;
+        if (dirFileName.split(".")[0] === fileName) fullPath = directoryPath + "/" + dirFileName;
     }
     
     if (!fullPath) {
-        return null;
+        return false;
     } else {
-        return {
-            fullPath: fullPath
-        }
+        let fileContents = fs.readFileSync(fullPath);
+        let contentType = mime.lookup(fullPath);
+        res.setHeader('content-type', contentType);
+        res.write(fileContents);
+        res.end();
+        return true;
     }
 }

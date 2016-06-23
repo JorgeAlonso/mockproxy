@@ -1,10 +1,10 @@
 'use strict'
 
-let httpProxy = require('http-proxy'),
+const httpProxy = require('http-proxy'),
     config = require("../config.js"),
     urlUtils = require("../utils/urlUtils.js");
     
-let proxy = httpProxy.createProxyServer({});
+const proxy = httpProxy.createProxyServer({});
 
 // Listen for the `error` event on `proxy`.
 proxy.on('error', function (err, req, res) {
