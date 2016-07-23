@@ -4,9 +4,10 @@ var config = {};
 
 config.routes = {
     default: {
-        protocol: "http",
-        host: "localhost",
-        port: "8080"
+        protocol: "https",
+        host: "peg-dev-public-api.eu.cloudhub.io",
+        port: "443",
+        suburl: "/api/v0.2"
     },
     remote: {
         protocol: "http",

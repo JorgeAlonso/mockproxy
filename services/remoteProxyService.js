@@ -2,9 +2,17 @@
 
 const httpProxy = require('http-proxy'),
     config = require("../config.js"),
-    urlUtils = require("../utils/urlUtils.js");
-    
-const proxy = httpProxy.createProxyServer({});
+    urlUtils = require("../utils/urlUtils.js"),
+    https = require("https");
+
+
+//Create server    
+const proxy = httpProxy.createProxyServer({
+    agent: new https.Agent({
+        rejectUnauthorized: false
+    })
+
+});
 
 // Listen for the `error` event on `proxy`.
 proxy.on('error', function (err, req, res) {
@@ -45,8 +53,14 @@ function proxyToRemoteServer(req, res) {
     let serverToProxyUrl = urlUtils.getFullUrlFromConfigObject(serverToProxyDetails);
     
     req._hostToProxy = serverToProxyDetails.host;
+
+    let proxyOptions = {
+        target: serverToProxyUrl
+    };
+
+    if (serverToProxyUrl.startsWith("https")) proxyOptions.secure = true;
       
-    proxy.web(req, res, { target: serverToProxyUrl });
+    proxy.web(req, res, proxyOptions);
 }
 
 

@@ -5,7 +5,6 @@ const localFileService = require("./services/localFileService.js"),
     http = require('http');
 
 
-
 /**
  * Logic on server:
  * 1.- Check if a mock file exists

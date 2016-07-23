@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/JorgeAlonso/mockproxy#readme",
   "dependencies": {
-    "http-proxy": "^1.14.0"
+    "http-proxy": "^1.14.0",
+    "mime": "^1.3.4"
   }
 }
